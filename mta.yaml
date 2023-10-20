@@ -8,6 +8,7 @@ modules:
     path: gen/srv
     requires:
       - name: MyLibraryCAP-db
+      - name: MyLibraryCAP-auth
     provides:
       - name: srv-api
         properties:
@@ -48,6 +49,22 @@ modules:
         - npm run build:cf
       supported-platforms:
         []
+
+  - name: MyLibraryCAP
+    type: approuter.nodejs
+    path: app/
+    parameters:
+      keep-existing-routes: true
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api # must be used in xs-app.json as well
+          url: ~{srv-url}
+          forwardAuthToken: true
+      - name: MyLibraryCAP-auth
 resources:
   - name: MyLibraryCAP-db
     type: com.sap.xs.hdi-container
@@ -78,6 +95,15 @@ resources:
       service: destination
       service-name: MyLibraryCAP-destination-service
       service-plan: lite
+  - name: MyLibraryCAP-auth
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: MyLibraryCAP-${org}-${space}
+        tenant-mode: dedicated
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
