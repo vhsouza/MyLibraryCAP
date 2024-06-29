@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_BookCopies" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="CV_BookCopies"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="LOCALIZED_CATALOGSERVICE_BOOKCOPIES">
+    <resourceUri>LOCALIZED_CATALOGSERVICE_BOOKCOPIES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews/>
+
+<logicalModel id="LOCALIZED_CATALOGSERVICE_BOOKCOPIES">
+  <attributes>
+    <attribute id="CREATEDAT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="MODIFIEDAT" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="MODIFIEDAT"/>
+    </attribute>
+    <attribute id="MODIFIEDBY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="MODIFIEDBY"/>
+    </attribute>
+    <attribute id="COPYID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="COPYID"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="COPYID"/>
+    </attribute>
+    <attribute id="BOOK_ID" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BOOK_ID"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="BOOK_ID"/>
+    </attribute>
+    <attribute id="STATUS_ID" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS_ID"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="STATUS_ID"/>
+    </attribute>
+    <attribute id="RESERVEDFROM" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="RESERVEDFROM"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="RESERVEDFROM"/>
+    </attribute>
+    <attribute id="RESERVEDUNTIL" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="RESERVEDUNTIL"/>
+      <keyMapping columnObjectName="LOCALIZED_CATALOGSERVICE_BOOKCOPIES" columnName="RESERVEDUNTIL"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  </shapes>
+</layout>
+</Calculation:scenario>

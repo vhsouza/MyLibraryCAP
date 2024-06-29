@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_BOOKSREPORT2" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" propagateInstantiation="true">
+<descriptions defaultDescription="CV_BooksReport2"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="LOCALIZED_MY_LIBRARY_BOOKS_COPIES">
+    <resourceUri>LOCALIZED_MY_LIBRARY_BOOKS_COPIES</resourceUri>
+  </DataSource>
+  <DataSource id="LOCALIZED_MY_LIBRARY_BOOKS">
+    <resourceUri>LOCALIZED_MY_LIBRARY_BOOKS</resourceUri>
+  </DataSource>
+  <DataSource id="TotalOfAvailableCube$$$$LOCALIZED_MY_LIBRARY_BOOKS_COPIES$$">
+    <resourceUri>LOCALIZED_MY_LIBRARY_BOOKS_COPIES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:AggregationView" id="TotalOfCopies">
+    <viewAttributes>
+      <viewAttribute id="BOOK_ID"/>
+      <viewAttribute id="TOTALOFPAGES" aggregationType="count"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="LOCALIZED_MY_LIBRARY_BOOKS_COPIES">
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALOFPAGES" source="COPYID"/>
+    </input>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="Books">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="PAGES"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="LOCALIZED_MY_LIBRARY_BOOKS"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:AggregationView" id="TotalOfAvailableCube" filterExpressionLanguage="SQL">
+    <viewAttributes>
+      <viewAttribute id="BOOK_ID"/>
+      <viewAttribute id="STATUS_ID"/>
+      <viewAttribute id="AVAILABLECOPIES" aggregationType="count"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="TotalOfAvailableCube$$$$LOCALIZED_MY_LIBRARY_BOOKS_COPIES$$">
+      <mapping xsi:type="Calculation:AttributeMapping" target="AVAILABLECOPIES" source="COPYID"/>
+    </input>
+    <filter>&quot;STATUS_ID&quot;='10'</filter>
+  </calculationView>
+  <calculationView xsi:type="Calculation:ProjectionView" id="TotalOfAvailable" ignoreMultipleOutputsForFilter="true">
+    <viewAttributes>
+      <viewAttribute id="BOOK_ID"/>
+      <viewAttribute id="AVAILABLECOPIES"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="TotalOfAvailableCube"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="BooksWithTotals_1" cardinality="C1_1" joinType="leftOuter" multiJoinNode="BooksWithTotals" multiJoinCentralTable="Books" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="PAGES"/>
+      <viewAttribute id="AVAILABLECOPIES"/>
+      <viewAttribute hidden="true" id="JOIN$ID$BOOK_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="Books">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAGES" source="PAGES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOK_ID" source="ID"/>
+    </input>
+    <input node="TotalOfAvailable">
+      <mapping xsi:type="Calculation:AttributeMapping" target="AVAILABLECOPIES" source="AVAILABLECOPIES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOK_ID" source="BOOK_ID"/>
+    </input>
+    <joinAttribute name="JOIN$ID$BOOK_ID"/>
+  </calculationView>
+  <calculationView xsi:type="Calculation:JoinView" id="BooksWithTotals_2" cardinality="C1_1" joinType="inner" multiJoinNode="BooksWithTotals" multiJoinCentralTable="Books" multiJoinOrder="Outside In">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="PAGES"/>
+      <viewAttribute id="AVAILABLECOPIES"/>
+      <viewAttribute id="TOTALOFPAGES"/>
+      <viewAttribute hidden="true" id="JOIN$ID$BOOK_ID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="BooksWithTotals_1">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAGES" source="PAGES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="AVAILABLECOPIES" source="AVAILABLECOPIES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOK_ID" source="ID"/>
+    </input>
+    <input node="TotalOfCopies">
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALOFPAGES" source="TOTALOFPAGES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOK_ID" source="BOOK_ID"/>
+    </input>
+    <joinAttribute name="JOIN$ID$BOOK_ID"/>
+  </calculationView>
+</calculationViews>
+
+<logicalModel id="BooksWithTotals_2">
+  <attributes>
+    <attribute id="CREATEDAT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="MODIFIEDAT" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="MODIFIEDAT"/>
+    </attribute>
+    <attribute id="MODIFIEDBY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="MODIFIEDBY"/>
+    </attribute>
+    <attribute id="ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="ID"/>
+    </attribute>
+    <attribute id="TITLE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TITLE"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="TITLE"/>
+    </attribute>
+    <attribute id="PAGES" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAGES"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="PAGES"/>
+    </attribute>
+    <attribute id="TOTALOFPAGES" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TOTALOFPAGES"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="TOTALOFPAGES"/>
+    </attribute>
+    <attribute id="AVAILABLECOPIES" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AVAILABLECOPIES"/>
+      <keyMapping columnObjectName="BooksWithTotals_2" columnName="AVAILABLECOPIES"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="331" y="112"/>
+    
+      <rectangleSize width="160"/>
+    </shape>
+    
+  
+    <shape expanded="true" modelObjectName="TotalOfCopies" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="511" y="371"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="Books" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="301" y="371"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape expanded="true" modelObjectName="TotalOfAvailableCube" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="476"/>
+      <rectangleSize width="160"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="TotalOfAvailable" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="92" y="371"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+  
+  
+    <shape expanded="true" modelObjectName="BooksWithTotals" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="331" y="217"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="TotalOfCopies" modelObjectNameSpace="BooksWithTotals" modelObjectType="JoinNodeInput" multiJoinViewNodeName="BooksWithTotals">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Books" modelObjectNameSpace="BooksWithTotals" modelObjectType="JoinNodeInput" multiJoinViewNodeName="BooksWithTotals">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="TotalOfAvailable" modelObjectNameSpace="BooksWithTotals" modelObjectType="JoinNodeInput" multiJoinViewNodeName="BooksWithTotals">
+      <upperLeftCorner x="620" y="30"/>
+      <rectangleSize width="148"/>
+    </shape></shapes>
+</layout>
+</Calculation:scenario>

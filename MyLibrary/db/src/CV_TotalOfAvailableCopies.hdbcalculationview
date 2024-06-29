@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_TotalOfAvailableCopies" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="true" endUserView="false">
+<descriptions defaultDescription="CV_TotalOfAvailableCopies"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="LOCALIZED_MY_LIBRARY_BOOKS_COPIES">
+    <resourceUri>LOCALIZED_MY_LIBRARY_BOOKS_COPIES</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews/>
+
+<logicalModel id="LOCALIZED_MY_LIBRARY_BOOKS_COPIES" filterExpressionLanguage="SQL">
+  <attributes>
+    <attribute id="BOOK_ID" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="BOOK_ID"/>
+      <keyMapping columnObjectName="LOCALIZED_MY_LIBRARY_BOOKS_COPIES" columnName="BOOK_ID"/>
+    </attribute>
+    <attribute id="STATUS_ID" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="STATUS_ID"/>
+      <keyMapping columnObjectName="LOCALIZED_MY_LIBRARY_BOOKS_COPIES" columnName="STATUS_ID"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="TotalOfAvailableCopies" order="3" aggregationType="count" measureType="simple" restrictionExpressionLanguage="SQL">
+      <descriptions defaultDescription="COPYID"/>
+      <measureMapping columnObjectName="LOCALIZED_MY_LIBRARY_BOOKS_COPIES" columnName="COPYID"/>
+      <exceptionAggregationMetadata/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+
+
+  <filter>&quot;STATUS_ID&quot;='10'</filter>
+
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    
+  </shapes>
+</layout>
+</Calculation:scenario>

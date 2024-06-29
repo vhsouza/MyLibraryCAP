@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Capabilities.V1.xml">
+        <edmx:Include Alias="Capabilities" Namespace="Org.OData.Capabilities.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Books" EntityType="CatalogService.Books">
+                    <NavigationPropertyBinding Path="Authors" Target="BookAuthors"/>
+                    <NavigationPropertyBinding Path="Copies" Target="BookCopies"/>
+                    <NavigationPropertyBinding Path="texts" Target="Books_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="Books_texts"/>
+                </EntitySet>
+                <EntitySet Name="Authors" EntityType="CatalogService.Authors"/>
+                <EntitySet Name="BookAuthors" EntityType="CatalogService.BookAuthors">
+                    <NavigationPropertyBinding Path="Author" Target="Authors"/>
+                    <NavigationPropertyBinding Path="Book" Target="Books"/>
+                </EntitySet>
+                <EntitySet Name="BookCopies" EntityType="CatalogService.BookCopies">
+                    <NavigationPropertyBinding Path="Book" Target="Books"/>
+                    <NavigationPropertyBinding Path="Status" Target="BookCopyStatus"/>
+                </EntitySet>
+                <EntitySet Name="BookCopyStatus" EntityType="CatalogService.BookCopyStatus">
+                    <NavigationPropertyBinding Path="texts" Target="BookCopyStatus_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="BookCopyStatus_texts"/>
+                </EntitySet>
+                <EntitySet Name="CV_BooksReport2" EntityType="CatalogService.CV_BooksReport2"/>
+                <EntitySet Name="CV_BooksReport" EntityType="CatalogService.CV_BooksReport"/>
+                <EntitySet Name="Books_texts" EntityType="CatalogService.Books_texts"/>
+                <EntitySet Name="BookCopyStatus_texts" EntityType="CatalogService.BookCopyStatus_texts"/>
+            </EntityContainer>
+            <EntityType Name="Books">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Title" Type="Edm.String"/>
+                <Property Name="Pages" Type="Edm.Int32"/>
+                <NavigationProperty Name="Authors" Type="Collection(CatalogService.BookAuthors)" Partner="Book">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="Copies" Type="Collection(CatalogService.BookCopies)" Partner="Book">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="texts" Type="Collection(CatalogService.Books_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="CatalogService.Books_texts">
+                    <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="Authors">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="FirstName" Type="Edm.String"/>
+                <Property Name="LastName" Type="Edm.String"/>
+                <Property Name="FullName" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="BookAuthors">
+                <Key>
+                    <PropertyRef Name="Author_ID"/>
+                    <PropertyRef Name="Book_ID"/>
+                </Key>
+                <NavigationProperty Name="Author" Type="CatalogService.Authors">
+                    <ReferentialConstraint Property="Author_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="Author_ID" Type="Edm.Int32" Nullable="false"/>
+                <NavigationProperty Name="Book" Type="CatalogService.Books" Partner="Authors">
+                    <ReferentialConstraint Property="Book_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="Book_ID" Type="Edm.Guid" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="BookCopies">
+                <Key>
+                    <PropertyRef Name="CopyID"/>
+                    <PropertyRef Name="Book_ID"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="CopyID" Type="Edm.Int32" Nullable="false"/>
+                <NavigationProperty Name="Book" Type="CatalogService.Books" Partner="Copies">
+                    <ReferentialConstraint Property="Book_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="Book_ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="Status" Type="CatalogService.BookCopyStatus">
+                    <ReferentialConstraint Property="Status_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="Status_ID" Type="Edm.Int32"/>
+                <Property Name="ReservedFrom" Type="Edm.DateTimeOffset"/>
+                <Property Name="ReservedUntil" Type="Edm.DateTimeOffset"/>
+            </EntityType>
+            <EntityType Name="BookCopyStatus">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Text" Type="Edm.String"/>
+                <NavigationProperty Name="texts" Type="Collection(CatalogService.BookCopyStatus_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="CatalogService.BookCopyStatus_texts">
+                    <ReferentialConstraint Property="ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="CV_BooksReport2">
+                <Key>
+                    <PropertyRef Name="CREATEDAT"/>
+                </Key>
+                <Property Name="CREATEDAT" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
+                <Property Name="CREATEDBY" Type="Edm.String" MaxLength="255"/>
+                <Property Name="MODIFIEDAT" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="MODIFIEDBY" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.String" MaxLength="36"/>
+                <Property Name="TITLE" Type="Edm.String" MaxLength="5000"/>
+                <Property Name="PAGES" Type="Edm.Int32"/>
+                <Property Name="TOTALOFPAGES" Type="Edm.Int64"/>
+                <Property Name="AVAILABLECOPIES" Type="Edm.Int64"/>
+            </EntityType>
+            <EntityType Name="CV_BooksReport">
+                <Key>
+                    <PropertyRef Name="CREATEDAT"/>
+                </Key>
+                <Property Name="CREATEDAT" Type="Edm.DateTimeOffset" Precision="7" Nullable="false"/>
+                <Property Name="CREATEDBY" Type="Edm.String" MaxLength="255"/>
+                <Property Name="MODIFIEDAT" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="MODIFIEDBY" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.String" MaxLength="36"/>
+                <Property Name="TITLE" Type="Edm.String" MaxLength="5000"/>
+                <Property Name="PAGES" Type="Edm.Int32"/>
+                <Property Name="TotalOfAvailableCopies" Type="Edm.Int64"/>
+                <Property Name="TotalOfCopies" Type="Edm.Int64"/>
+            </EntityType>
+            <EntityType Name="Books_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="Title" Type="Edm.String"/>
+            </EntityType>
+            <EntityType Name="BookCopyStatus_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="Text" Type="Edm.String"/>
+            </EntityType>
+            <Annotations Target="CatalogService.Books/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                </Annotations>
+                <Annotations Target="CatalogService.Books/createdBy">
+                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                    <Annotation Term="Core.Immutable" Bool="true"/>
+                    <Annotation Term="Core.Computed" Bool="true"/>
+                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                        </Annotations>
+                        <Annotations Target="CatalogService.Books/modifiedAt">
+                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                            <Annotation Term="Core.Computed" Bool="true"/>
+                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                            </Annotations>
+                            <Annotations Target="CatalogService.Books/modifiedBy">
+                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                <Annotation Term="Core.Computed" Bool="true"/>
+                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.Books/ID">
+                                        <Annotation Term="Common.Label" String="UUID"/>
+                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.Books/Title">
+                                        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.Books/Pages">
+                                        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+                                    </Annotations>
+                                    <Annotations Target="CatalogService.Authors/createdAt">
+                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                        </Annotations>
+                                        <Annotations Target="CatalogService.Authors/createdBy">
+                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                            <Annotation Term="Core.Immutable" Bool="true"/>
+                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                            <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                </Annotations>
+                                                <Annotations Target="CatalogService.Authors/modifiedAt">
+                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                    <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                    </Annotations>
+                                                    <Annotations Target="CatalogService.Authors/modifiedBy">
+                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                            <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                            </Annotations>
+                                                            <Annotations Target="CatalogService.Authors/ID">
+                                                                <Annotation Term="Common.Label" String="UUID"/>
+                                                            </Annotations>
+                                                            <Annotations Target="CatalogService.Authors/FullName">
+                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="CatalogService.BookCopies/createdAt">
+                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                                                </Annotations>
+                                                                <Annotations Target="CatalogService.BookCopies/createdBy">
+                                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                    <Annotation Term="Core.Immutable" Bool="true"/>
+                                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                                        </Annotations>
+                                                                        <Annotations Target="CatalogService.BookCopies/modifiedAt">
+                                                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                                            </Annotations>
+                                                                            <Annotations Target="CatalogService.BookCopies/modifiedBy">
+                                                                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                                                <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.BookCopies/Status_ID">
+                                                                                        <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.BookCopyStatus/ID">
+                                                                                        <Annotation Term="Common.Label" String="UUID"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.EntityContainer/CV_BooksReport2">
+                                                                                        <Annotation Term="Capabilities.DeleteRestrictions">
+                                                                                            <Record Type="Capabilities.DeleteRestrictionsType">
+                                                                                                <PropertyValue Property="Deletable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.InsertRestrictions">
+                                                                                            <Record Type="Capabilities.InsertRestrictionsType">
+                                                                                                <PropertyValue Property="Insertable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.UpdateRestrictions">
+                                                                                            <Record Type="Capabilities.UpdateRestrictionsType">
+                                                                                                <PropertyValue Property="Updatable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/CREATEDAT">
+                                                                                        <Annotation Term="Common.Label" String="CREATEDAT: CREATEDAT"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/CREATEDBY">
+                                                                                        <Annotation Term="Common.Label" String="CREATEDBY: CREATEDBY"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/MODIFIEDAT">
+                                                                                        <Annotation Term="Common.Label" String="MODIFIEDAT: MODIFIEDAT"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/MODIFIEDBY">
+                                                                                        <Annotation Term="Common.Label" String="MODIFIEDBY: MODIFIEDBY"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/ID">
+                                                                                        <Annotation Term="Common.Label" String="ID: ID"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/TITLE">
+                                                                                        <Annotation Term="Common.Label" String="TITLE: TITLE"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/PAGES">
+                                                                                        <Annotation Term="Common.Label" String="PAGES: PAGES"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/TOTALOFPAGES">
+                                                                                        <Annotation Term="Common.Label" String="TOTALOFPAGES: TOTALOFPAGES"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport2/AVAILABLECOPIES">
+                                                                                        <Annotation Term="Common.Label" String="AVAILABLECOPIES: AVAILABLECOPIES"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.EntityContainer/CV_BooksReport">
+                                                                                        <Annotation Term="Capabilities.DeleteRestrictions">
+                                                                                            <Record Type="Capabilities.DeleteRestrictionsType">
+                                                                                                <PropertyValue Property="Deletable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.InsertRestrictions">
+                                                                                            <Record Type="Capabilities.InsertRestrictionsType">
+                                                                                                <PropertyValue Property="Insertable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                        <Annotation Term="Capabilities.UpdateRestrictions">
+                                                                                            <Record Type="Capabilities.UpdateRestrictionsType">
+                                                                                                <PropertyValue Property="Updatable" Bool="false"/>
+                                                                                            </Record>
+                                                                                        </Annotation>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/CREATEDAT">
+                                                                                        <Annotation Term="Common.Label" String="CREATEDAT: CREATEDAT"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/CREATEDBY">
+                                                                                        <Annotation Term="Common.Label" String="CREATEDBY: CREATEDBY"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/MODIFIEDAT">
+                                                                                        <Annotation Term="Common.Label" String="MODIFIEDAT: MODIFIEDAT"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/MODIFIEDBY">
+                                                                                        <Annotation Term="Common.Label" String="MODIFIEDBY: MODIFIEDBY"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/ID">
+                                                                                        <Annotation Term="Common.Label" String="ID: ID"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/TITLE">
+                                                                                        <Annotation Term="Common.Label" String="TITLE: TITLE"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/PAGES">
+                                                                                        <Annotation Term="Common.Label" String="PAGES: PAGES"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/TotalOfAvailableCopies">
+                                                                                        <Annotation Term="Common.Label" String="TotalOfAvailableCopies: COPYID"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.CV_BooksReport/TotalOfCopies">
+                                                                                        <Annotation Term="Common.Label" String="TotalOfCopies: COPYID"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="CatalogService.Books_texts/locale">
+                                                                                        <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="CatalogService.Books_texts/ID">
+                                                                                            <Annotation Term="Common.Label" String="UUID"/>
+                                                                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="CatalogService.Books_texts/Title">
+                                                                                            <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="CatalogService.BookCopyStatus_texts/locale">
+                                                                                            <Annotation Term="Common.Label" String="{i18n>LanguageCode}"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="CatalogService.BookCopyStatus_texts/ID">
+                                                                                                <Annotation Term="Common.Label" String="UUID"/>
+                                                                                            </Annotations>
+                                                                                        </Schema>
+                                                                                    </edmx:DataServices>
+                                                                                </edmx:Edmx>
