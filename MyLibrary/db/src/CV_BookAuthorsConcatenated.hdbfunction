@@ -1,0 +1,57 @@
+FUNCTION "CV_BookAuthorsConcatena"( )
+    RETURNS  TABLE(
+        "BOOKID"  NVARCHAR(36),
+        "AUTHORS_FULLNAME" NVARCHAR(1000)
+    )
+    LANGUAGE SQLSCRIPT
+    SQL SECURITY INVOKER 
+    AS
+BEGIN
+
+    DECLARE lt_outtab TABLE(
+        BOOKID  NVARCHAR(36),
+        AUTHORS_FULLNAME NVARCHAR(1000)
+    );
+    
+    declare l_bookid  NVARCHAR(36);
+    declare l_authors NVARCHAR(1000);
+    declare l_books_index INTEGER;
+    declare l_books_author_index INTEGER;
+
+    books = SELECT "MY_LIBRARY_BOOKS"."ID" from "MY_LIBRARY_BOOKS";
+
+    /*
+    booksAuthors = SELECT "MY_LIBRARY_BOOKS_AUTHORS"."BOOK_ID", "MY_LIBRARY_BOOKS_AUTHORS"."AUTHOR_ID", 
+                          "MY_LIBRARY_AUTHORS"."FIRSTNAME", "MY_LIBRARY_AUTHORS"."LASTNAME"
+    FROM :books as "BOOKS"
+    inner join "MY_LIBRARY_BOOKS_AUTHORS"  on "BOOK_ID" = "BOOKS"."ID"
+    inner join "MY_LIBRARY_AUTHORS"  on "MY_LIBRARY_BOOKS_AUTHORS"."AUTHOR_ID" = "MY_LIBRARY_AUTHORS"."ID"; 
+    */
+
+    for l_books_index in 1..record_count( :books) do 
+        l_bookid = :books.ID[ :l_books_index ];
+
+        booksAuthors = SELECT "MY_LIBRARY_BOOKS_AUTHORS"."BOOK_ID", "MY_LIBRARY_BOOKS_AUTHORS"."AUTHOR_ID", 
+                              "MY_LIBRARY_AUTHORS"."FIRSTNAME", "MY_LIBRARY_AUTHORS"."LASTNAME"   
+                        FROM "MY_LIBRARY_BOOKS_AUTHORS"
+                        inner join "MY_LIBRARY_AUTHORS"  on "MY_LIBRARY_BOOKS_AUTHORS"."AUTHOR_ID" = "MY_LIBRARY_AUTHORS"."ID"
+                        WHERE "MY_LIBRARY_BOOKS_AUTHORS"."BOOK_ID" = :l_bookid;
+        
+        l_authors = NULL;
+        for l_books_author_index in 1..record_count( :booksAuthors) do 
+            --l_authors = CONCAT(:booksAuthors.FIRSTNAME[ :l_books_author_index ], :booksAuthors.LASTNAME[ :l_books_author_index ]);
+            IF :l_authors IS NULL
+                THEN 
+                l_authors = :booksAuthors.FIRSTNAME[ :l_books_author_index ] || ' ' || :booksAuthors.LASTNAME[ :l_books_author_index ];
+            ELSE
+                l_authors = l_authors || ', ' || :booksAuthors.FIRSTNAME[ :l_books_author_index ] || ' ' || :booksAuthors.LASTNAME[ :l_books_author_index ];
+            END IF;
+        end for;
+
+        INSERT INTO :lt_outtab VALUES(:l_bookid, :l_authors);
+        
+    end for;
+
+    RETURN :lt_outtab;
+
+END;

@@ -4,7 +4,8 @@ using CV_BOOKSREPORT from '../db/schema';
 
 @path: 'service/Library'
 service CatalogService {
-    
+
+    @requires: 'support'
     @odata.draft.enabled
     entity Books           as projection on Library.Books;
 
@@ -13,10 +14,12 @@ service CatalogService {
     entity BookCopies      as projection on Library.Books.Copies;
     entity BookCopyStatus  as projection on Library.BookCopyStatus;
     entity BooksText       as projection on Library.Books.texts;
-    
+
+    @requires: 'support'
     @readonly
     entity CV_BooksReport2 as projection on CV_BOOKSREPORT2;
 
+    @requires: 'authenticated-user'
     @readonly
     entity CV_BooksReport  as projection on CV_BOOKSREPORT;
 };

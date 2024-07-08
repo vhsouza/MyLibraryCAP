@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_AvailableBooksForReservation" applyPrivilegeType="NONE" dataCategory="DIMENSION" dimensionType="STANDARD" schemaVersion="3.0" hierarchyGeneration="SQL" outputViewType="Projection" application="BAS" cacheInvalidationPeriod="NONE" enforceSqlExecution="true">
+<descriptions defaultDescription="CV_BooksAvailableForReservation2.hdbcalculationview"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="CV_BOOKSREPORT">
+    <resourceUri>CV_BOOKSREPORT</resourceUri>
+  </DataSource>
+  <DataSource id="CV_BookAuthorsConcatena" type="TABLE_FUNCTION">
+    <resourceUri>CV_BookAuthorsConcatena</resourceUri>
+  </DataSource>
+</dataSources>
+<snapshotProcedures/>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="BooksAvailable" cardinality="C1_1" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="CREATEDAT"/>
+      <viewAttribute id="CREATEDBY"/>
+      <viewAttribute id="MODIFIEDAT"/>
+      <viewAttribute id="MODIFIEDBY"/>
+      <viewAttribute id="ID"/>
+      <viewAttribute id="TITLE"/>
+      <viewAttribute id="PAGES"/>
+      <viewAttribute id="TOTALOFCOPIES"/>
+      <viewAttribute id="TOTALOFAVAILABLECOPIES"/>
+      <viewAttribute id="PERCENTAGE_OF_AVAIL"/>
+      <viewAttribute id="AUTHORS_FULLNAME"/>
+      <viewAttribute hidden="true" id="JOIN$ID$BOOKID"/>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <input node="CV_BOOKSREPORT">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDAT" source="CREATEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CREATEDBY" source="CREATEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDAT" source="MODIFIEDAT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="MODIFIEDBY" source="MODIFIEDBY"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="ID" source="ID"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TITLE" source="TITLE"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PAGES" source="PAGES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALOFCOPIES" source="TOTALOFCOPIES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="TOTALOFAVAILABLECOPIES" source="TOTALOFAVAILABLECOPIES"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="PERCENTAGE_OF_AVAIL" source="PERCENTAGE_OF_AVAIL"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOKID" source="ID"/>
+    </input>
+    <input node="CV_BookAuthorsConcatena">
+      <mapping xsi:type="Calculation:AttributeMapping" target="AUTHORS_FULLNAME" source="AUTHORS_FULLNAME"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="JOIN$ID$BOOKID" source="BOOKID"/>
+    </input>
+    <joinAttribute name="JOIN$ID$BOOKID"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="BooksAvailable">
+  <attributes>
+    <attribute id="CREATEDAT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDAT"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="CREATEDAT"/>
+    </attribute>
+    <attribute id="CREATEDBY" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="CREATEDBY"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="CREATEDBY"/>
+    </attribute>
+    <attribute id="MODIFIEDAT" order="3" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDAT"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="MODIFIEDAT"/>
+    </attribute>
+    <attribute id="MODIFIEDBY" order="4" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="MODIFIEDBY"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="MODIFIEDBY"/>
+    </attribute>
+    <attribute id="ID" order="5" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="ID"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="ID"/>
+    </attribute>
+    <attribute id="TITLE" order="6" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TITLE"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="TITLE"/>
+    </attribute>
+    <attribute id="PAGES" order="7" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="PAGES"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="PAGES"/>
+    </attribute>
+    <attribute id="TOTALOFCOPIES" order="8" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TOTALOFCOPIES"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="TOTALOFCOPIES"/>
+    </attribute>
+    <attribute id="TOTALOFAVAILABLECOPIES" order="9" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="TOTALOFAVAILABLECOPIES"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="TOTALOFAVAILABLECOPIES"/>
+    </attribute>
+    <attribute id="PERCENTAGE_OF_AVAIL" order="10" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Percentage of available copies"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="PERCENTAGE_OF_AVAIL"/>
+    </attribute>
+    <attribute id="AUTHORS_FULLNAME" order="11" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="AUTHORS_FULLNAME"/>
+      <keyMapping columnObjectName="BooksAvailable" columnName="AUTHORS_FULLNAME"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures/>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+    <shape expanded="true" modelObjectName="BooksAvailable" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="205"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="CV_BOOKSREPORT" modelObjectNameSpace="BooksAvailable" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="234.349609375"/>
+    </shape>
+    <shape modelObjectName="CV_BookAuthorsConcatena" modelObjectNameSpace="BooksAvailable" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="224.6875"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>
