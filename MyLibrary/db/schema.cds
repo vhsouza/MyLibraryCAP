@@ -79,3 +79,19 @@ entity CV_BOOKSREPORT {
         TotalOfCopies          : Integer64    @title: 'TotalOfCopies';
         PERCENTAGE_OF_AVAIL    : Integer      @title: 'Percentage of available copies';
 }
+
+@cds.persistence.exists
+@cds.persistence.calcview
+entity CV_AVAILABLEBOOKSFORRESERVATION {
+        CREATEDAT              : Timestamp    @title: 'CREATEDAT: CREATEDAT';
+        CREATEDBY              : String(255)  @title: 'CREATEDBY: CREATEDBY';
+        MODIFIEDAT             : Timestamp    @title: 'MODIFIEDAT: MODIFIEDAT';
+        MODIFIEDBY             : String(255)  @title: 'MODIFIEDBY: MODIFIEDBY';
+    key ID                     : String(36)   @title: 'ID: ID';
+        TITLE                  : String(5000) @title: 'TITLE: TITLE';
+        PAGES                  : Integer      @title: 'PAGES: PAGES';
+        TOTALOFCOPIES          : Integer64    @title: 'TOTALOFCOPIES: TOTALOFCOPIES';
+        TOTALOFAVAILABLECOPIES : Integer64    @title: 'TOTALOFAVAILABLECOPIES: TOTALOFAVAILABLECOPIES';
+        PERCENTAGE_OF_AVAIL    : Integer      @title: 'PERCENTAGE_OF_AVAIL: Percentage of available copies';
+        AUTHORS_FULLNAME       : String(1000) @title: 'AUTHORS_FULLNAME: AUTHORS_FULLNAME';
+}
