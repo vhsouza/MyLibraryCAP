@@ -3,7 +3,7 @@ const cds = require("@sap/cds");
 
 module.exports = cds.service.impl(async function () {
 
-    const { Books, BookCopies, BookAuthors, BooksText} = this.entities;
+    const { Books, BookCopies, BookAuthors, BooksText } = this.entities;
 
     //*************** Books Methods
 
@@ -31,20 +31,24 @@ module.exports = cds.service.impl(async function () {
             })
         }
 
-    }),
+    });
 
-        //*************** BookAuthors Methods
+    this.on("reserveBooks", async (req) => {
+        console.log(req.data.booksToBeReserved.books)
+    });
 
-        this.after("READ", BookAuthors, async (req, next) => {
+    //*************** BookAuthors Methods
 
-            const authors = Array.isArray(req) ? req : [req];
+    this.after("READ", BookAuthors, async (req, next) => {
 
-            authors.forEach((author) => {
-                if (author.Author) {
-                    author.Author.FullName = author.Author.FirstName + ' ' + author.Author.LastName
-                }
-            });
+        const authors = Array.isArray(req) ? req : [req];
+
+        authors.forEach((author) => {
+            if (author.Author) {
+                author.Author.FullName = author.Author.FirstName + ' ' + author.Author.LastName
+            }
         });
+    });
 
     //*************** Books Copies Methods
     //https://cap.cloud.sap/docs/node.js/fiori for recent versions we must add the drafts at the end
@@ -74,6 +78,7 @@ module.exports = cds.service.impl(async function () {
         });
     });
 
+
     /***************************************************************** */
     /*INTERNAL METHODS*/
     /***************************************************************** */
@@ -93,7 +98,7 @@ module.exports = cds.service.impl(async function () {
 
     };
 
-    function _convertLocale(locale){
+    function _convertLocale(locale) {
         return locale.substring(0, 2)
     };
 

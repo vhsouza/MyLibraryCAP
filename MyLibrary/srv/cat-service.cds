@@ -28,5 +28,17 @@ service CatalogService {
     @readonly
     entity CV_BooksAvailableForReservation as projection on CV_AVAILABLEBOOKSFORRESERVATION;
 
+    type reserveBooksParam : {
+        books : array of reserveBookParam;
+    };
+
+    type reserveBookParam  : {
+        bookId         : Books:ID;
+        requestedCopies : Integer;
+    };
+
+    action reserveBooks(booksToBeReserved : reserveBooksParam) returns {
+        reserveId : Integer
+    }
 
 };
